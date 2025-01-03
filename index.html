@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Environmental Studies Quiz</title>
+    <style>
+        /* Cute and Minimalistic UI */
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #f9f9f9;
+            color: #555;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .quiz-container {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+        .question-card {
+            margin-bottom: 20px;
+        }
+        .question {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option {
+            padding: 12px;
+            margin: 5px 0;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            font-size: 1em;
+            color: #555;
+        }
+        .option:hover {
+            background-color: #f0f0f0;
+            transform: scale(1.02);
+        }
+        .correct {
+            background-color: #d4f7e2;
+            border-color: #a8e6cf;
+        }
+        .wrong {
+            background-color: #ffd6d6;
+            border-color: #ff8b8b;
+        }
+        .result {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #333;
+        }
+        .next-button {
+            padding: 12px 25px;
+            background-color: #ff6f61;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        .next-button:hover {
+            background-color: #ff4a3d;
+        }
+        .score {
+            font-size: 1.2em;
+            color: #333;
+            margin-top: 20px;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div id="question-container">
+            <!-- Questions will be dynamically inserted here -->
+        </div>
+        <button id="next-button" class="next-button" onclick="nextQuestion()">Next Question</button>
+        <div class="score" id="score">Score: 0/50</div>
+        <div class="footer" id="footer">Made with ❤️ by Robii</div>
+    </div>
+
+    <script>
+        const questions = [
+        {
+            "question": "In which of the following reports/books was ‘Sustainable Development’ formally defined for the first time?",
+            "options": ["Silent Spring", "The Limits to Growth", "Our Common Future", "Agenda 21"],
+            "answer": "Our Common Future"
+        },
+        {
+            "question": "Which one of the following is not one of the seventeen Sustainable Development Goals adopted by the UN?",
+            "options": ["No Poverty", "Zero Hunger", "Good Health and Well-being", "Tourism and Travel"],
+            "answer": "Tourism and Travel"
+        },
+        {
+            "question": "Which one of the following is an example of a human-modified environment?",
+            "options": ["Artificial lakes", "Orchards", "Crop fields", "Dams"],
+            "answer": "Crop fields"
+        },
+        {
+            "question": "In which of the following do forests not play a significant role?",
+            "options": ["Soil formation", "Water conservation", "Regeneration of carbon dioxide", "Moderation of climate"],
+            "answer": "Regeneration of carbon dioxide"
+        },
+        {
+            "question": "Which one of the following regions covers more than 50% of the world's plant species?",
+            "options": ["Tropical Rain Forests", "Tropical Deciduous Forests", "Temperate Evergreen Forests", "Temperate Deciduous Forests"],
+            "answer": "Tropical Rain Forests"
+        },
+        {
+            "question": "Crown fire mostly takes place in which of the following forests?",
+            "options": ["Dense Forest", "Thorn Forest", "Savanna Forest", "Alpine Forest"],
+            "answer": "Dense Forest"
+        },
+        {
+            "question": "Communities residing near waste disposal sites receiving fewer economic benefits than the communities generating the waste represents:",
+            "options": ["Economic Inequity", "Social Inequity", "Procedural Inequity", "Geographical Inequity"],
+            "answer": "Social Inequity"
+        },
+        {
+            "question": "Which one of the following communities does not have a strong sense of stewardship?",
+            "options": ["Urban community", "Tribal community", "Traditional agricultural societies", "Pastoral community"],
+            "answer": "Urban community"
+        },
+        {
+            "question": "Which of the following views considers nature as a mother and that she cannot be tamed?",
+            "options": ["European view", "Indian view", "Sineatic view", "North American view"],
+            "answer": "Indian view"
+        },
+        {
+            "question": "The water cycle is driven by:",
+            "options": ["Global carbon cycle", "Sun", "Atmosphere", "Hydrogen"],
+            "answer": "Sun"
+        },
+        {
+            "question": "Chemosynthetic bacteria are:",
+            "options": ["Phagotrophs", "Saprotrophs", "Autotrophs", "Heterotrophs"],
+            "answer": "Autotrophs"
+        },
+        {
+            "question": "Life does not exist beyond _________ metres above mean sea level.",
+            "options": ["6000", "7000", "8000", "9000"],
+            "answer": "9000"
+        },
+        {
+            "question": "In an ecosystem, the decomposition of organisms takes place by:",
+            "options": ["Phagotrophs", "Reducers", "Primary consumers", "Secondary consumers"],
+            "answer": "Reducers"
+        },
+        {
+            "question": "The increase in population between 10,000 BC and about 1800 AD coincided with the:",
+            "options": ["Growth in agriculture", "Industrial revolution", "Large scale immigration", "Decrease in death rate"],
+            "answer": "Growth in agriculture"
+        },
+        {
+            "question": "During the 14th century, more than half the population of Europe and Asia was killed due to:",
+            "options": ["Bubonic plague", "Malaria", "The great fire", "The great earthquake"],
+            "answer": "Bubonic plague"
+        },
+        {
+            "question": "Which one of the following is not a genetic disease?",
+            "options": ["Haemophilia", "Sickle cell anemia", "Malaria", "Thalassemia"],
+            "answer": "Malaria"
+        },
+        {
+            "question": "Match the types of environmental influences with their respective category: (a) Poison (i) Physical, (b) Noise (ii) Sociological, (c) Overcrowding (iii) Biological, (d) Allergens (iv) Chemical",
+            "options": ["a – iii, b – ii, c – iv, d – i", "a – iv, b – i, c – ii, d – iii", "a – i, b – ii, c – iii, d – iv", "a – iv, b – iii, c – ii, d – i"],
+            "answer": "a – iv, b – i, c – ii, d – iii"
+        },
+        {
+            "question": "In a coniferous forest, the soil is:",
+            "options": ["Rich in mineral nutrients", "Acidic and mineral deficient", "Basic and mineral deficient", "Moderately basic and rich in mineral nutrients"],
+            "answer": "Acidic and mineral deficient"
+        },
+        {
+            "question": "The organisms which are attached to stems and leaves of rooted plants are known as:",
+            "options": ["Neuston", "Plankton", "Periphyton", "Nekton"],
+            "answer": "Periphyton"
+        },
+        {
+            "question": "In an ocean, the zone showing the maximum variability in terms of temperature, light, salinity, and moisture is:",
+            "options": ["Littoral zone", "Pelagic zone", "Benthic zone", "Neritic zone"],
+            "answer": "Littoral zone"
+        },
+        {
+            "question": "An estuary is a transitional zone representing:",
+            "options": ["A vast area of saline water", "A large number of organisms", "Great productivity built on a large base", "Unique ecological features and biotic communities"],
+            "answer": "Unique ecological features and biotic communities"
+        },
+        {
+            "question": "Which of the following is a major cause of deforestation?",
+            "options": ["Forest fires", "Construction of dams", "Shifting cultivation", "Mining"],
+            "answer": "Shifting cultivation"
+        },
+        {
+            "question": "Passenger pigeon is the perfect example of loss of species due to:",
+            "options": ["Habitat destruction", "Poisoning by pesticides", "Impact of climate change", "Hunting for food"],
+            "answer": "Hunting for food"
+        },
+        {
+            "question": "The weed which causes enormous damage in fish and rice crop is:",
+            "options": ["Water hyacinth", "Congress weed", "Golden apple snail", "Mesquite"],
+            "answer": "Water hyacinth"
+        },
+        {
+            "question": "Artificial insemination has been useful for conservation of:",
+            "options": ["Snakes", "Lizards", "Elephants", "Ducks"],
+            "answer": "Elephants"
+        },
+        {
+            "question": "Which one of the following is not a major characteristic feature of biodiversity hotspot?",
+            "options": ["Large number of species", "Abundance of endemic species", "Species under constant threat", "Large number of exotic species"],
+            "answer": "Large number of exotic species"
+        },
+        {
+            "question": "Which one of the following areas in India is a hotspot of biodiversity?",
+            "options": ["Sundarbans", "Western Ghats", "Eastern Ghats", "Gangetic Plains"],
+            "answer": "Western Ghats"
+        },
+        {
+            "question": "Which one of the following has the maximum genetic diversity in India?",
+            "options": ["Tea", "Teak", "Mango", "Wheat"],
+            "answer": "Mango"
+        },
+        {
+            "question": "Which of the following has the maximum percentage of availability of water?",
+            "options": ["Rivers", "Lakes", "Atmospheric water", "Ground water"],
+            "answer": "Ground water"
+        },
+        {
+            "question": "Among the ecosystems mentioned below, where can one find maximum biodiversity?",
+            "options": ["Mangroves", "Deserts", "Coral reefs", "Alpine meadows"],
+            "answer": "Coral reefs"
+        },
+        {
+            "question": "How much water on the Earth is readily accessible for human use?",
+            "options": ["0-5%", "1%", "2%", "3%"],
+            "answer": "1%"
+        },
+        {
+            "question": "The soil which is low in organic matter and has low fertility in India is:",
+            "options": ["Red soil", "Soil with loamy texture and dry composition", "Soil of desert region", "Soil of Himalayan region"],
+            "answer": "Soil of desert region"
+        },
+        {
+            "question": "Which of the following is not a practice used to prevent soil erosion?",
+            "options": ["Bunding", "Kul", "Mulching", "Soil moisture conservation"],
+            "answer": "Kul"
+        },
+        {
+            "question": "Identify the conventional source of energy from the following:",
+            "options": ["Biomass", "Geothermal", "Wind", "Atomic energy"],
+            "answer": "Atomic energy"
+        },
+        {
+            "question": "A biomass classifier converts:",
+            "options": ["Solid fuel to gaseous fuel", "Gaseous fuel to solid fuel", "Liquid fuel to gaseous fuel", "Gaseous fuel to liquid fuel"],
+            "answer": "Solid fuel to gaseous fuel"
+        },
+        {
+            "question": "The most suitable fuel for a fuel cell is:",
+            "options": ["Water", "Nitrogen", "Hydrogen", "Carbon dioxide"],
+            "answer": "Hydrogen"
+        },
+        {
+            "question": "The biophysical carrying capacity is ______ population that can be supported by the resources of the planet at a given level of technology.",
+            "options": ["The minimum", "The maximum", "All of the", "Half of the"],
+            "answer": "The maximum"
+        },
+        {
+            "question": "Which of the following is not a green house gas?",
+            "options": ["Carbon dioxide", "Methane", "Ozone", "Chlorine"],
+            "answer": "Chlorine"
+        },
+        {
+            "question": "Which of the following is not related to climate change?",
+            "options": ["UNFCC", "IPCC", "Kyoto Protocol", "Montreal Protocol"],
+            "answer": "Montreal Protocol"
+        },
+        {
+            "question": "The ozone layer is present in which of the following ranges of the atmosphere?",
+            "options": ["0 – 10 km", "15 – 50 km", "60 – 70 km", "65 – 90 km"],
+            "answer": "15 – 50 km"
+        },
+        {
+            "question": "The pH of rainfall was measured to be as per the following at four places A, B, C and D. Which place had the acid deposition? A - 5:5, B - 6:2, C - 6:5, D - 6:9",
+            "options": ["A - 5:5", "B - 6:2", "C - 6:5", "D - 6:9"],
+            "answer": "A - 5:5"
+        },
+        {
+            "question": "Which of the following chemicals is responsible for ozone depletion?",
+            "options": ["Sulphur oxides", "Carbon monoxide", "Chlorofluorocarbons", "Nitrogen oxide"],
+            "answer": "Chlorofluorocarbons"
+        },
+        {
+            "question": "Which of the following animals excretes very concentrated urine?",
+            "options": ["Camel", "Garden lizard", "Nocturnal Rodents", "Snakes"],
+            "answer": "Camel"
+        },
+        {
+            "question": "Which of the following is an example of non-point source of pollution?",
+            "options": ["Run-offs from agricultural fields", "Emissions from a power plant", "Discharge of effluent waste water from a factory", "Municipal waste water discharged in a river"],
+            "answer": "Run-offs from agricultural fields"
+        },
+        {
+            "question": "When was The Air (Prevention and Control of Pollution) Act enacted?",
+            "options": ["1974", "1986", "1981", "1987"],
+            "answer": "1981"
+        },
+        {
+            "question": "The main objective of UNFCC relates to:",
+            "options": ["Green house gases", "Ozone depleting substances", "Biological diversity", "Chemical and Hazardous wastes"],
+            "answer": "Green house gases"
+        },
+        {
+            "question": "Which is not a waste minimisation method?",
+            "options": ["Process modification", "Waste concentration", "Waste segregation", "Landfill"],
+            "answer": "Landfill"
+        },
+        {
+            "question": "Which is the best method for disposal of hospital and toxic wastes?",
+            "options": ["Incineration", "Dumping at sea", "Landfill", "Recycling"],
+            "answer": "Incineration"
+        },
+        {
+            "question": "Which method is commonly used to assess the presence of organisms in a water body?",
+            "options": ["MPN", "DO", "TDS", "COD"],
+            "answer": "MPN"
+        },
+        {
+            "question": "NBA has been set up under the:",
+            "options": ["The Wildlife (Protection) Act", "The Forest (Conservation) Act", "The Biological Diversity Act", "The Environment (Protection) Act"],
+            "answer": "The Biological Diversity Act"
+        }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionContainer = document.getElementById('question-container');
+        const nextButton = document.getElementById('next-button');
+        const scoreDisplay = document.getElementById('score');
+        const footer = document.getElementById('footer');
+
+        function showQuestion() {
+            const question = questions[currentQuestionIndex];
+            const questionHTML = `
+                <div class="question-card">
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options.map(option => `
+                            <div class="option" onclick="checkAnswer('${option}')">${option}</div>
+                        `).join('')}
+                    </div>
+                    <div class="result" id="result"></div>
+                </div>
+            `;
+            questionContainer.innerHTML = questionHTML;
+        }
+
+        function checkAnswer(selectedOption) {
+            const question = questions[currentQuestionIndex];
+            const result = document.getElementById('result');
+            if (selectedOption === question.answer) {
+                result.textContent = "Correct! 🎉";
+                result.style.color = "#2ecc71";
+                score++;
+            } else {
+                result.textContent = `Wrong! The correct answer is: ${question.answer} 😢`;
+                result.style.color = "#e74c3c";
+            }
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.onclick = null; // Disable further clicks
+                if (option.textContent === question.answer) {
+                    option.classList.add('correct');
+                } else if (option.textContent === selectedOption) {
+                    option.classList.add('wrong');
+                }
+            });
+            scoreDisplay.textContent = `Score: ${score}/50`;
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
+            } else {
+                questionContainer.innerHTML = `<div class="question-card">Quiz Over! 🎉 Your final score is ${score}/50</div>`;
+                nextButton.style.display = 'none';
+                footer.style.display = 'block'; // Show the footer at the end
+            }
+        }
+
+        showQuestion();
+    </script>
+</body>
+</html>
